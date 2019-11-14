@@ -4,7 +4,7 @@ import requests
 class PythonScraper:
 
     def __init__(self):
-        self.links = []
+        self.links = {}
 
     def getLinks(self):
         return self.links
@@ -16,7 +16,7 @@ class PythonScraper:
             if r.status_code != 200:
                 raise Exception("WARNING: Please slow down your requests!")
             for obj in r.json()["items"]:
-                self.links.append(obj["html_url"])
+                self.links[obj["full_name"]] = obj
 
 def main():
 
@@ -28,13 +28,10 @@ def main():
         print(error)
         return
         
-    links = scraper.getLinks()
+    repos = scraper.getLinks()
 
-    if links is None:
-        return
-
-    for link in links:
-        print(link)
+    for repo in repos:
+        print("Repo: {}".format(repo))
 
 if __name__ == "__main__":
     main()
