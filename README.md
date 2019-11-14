@@ -25,3 +25,6 @@ Ways to split the data...
  - How old is the project
    - Are we determining from the last commit or when the project started?
  
+ ## Running the Code
+
+ Please make sure your GitHub keys are in `keys.json`. They can be created [here](https://github.com/settings/developers) under OAuth Apps.
