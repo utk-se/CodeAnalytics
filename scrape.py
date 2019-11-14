@@ -10,7 +10,7 @@ class PythonScraper:
         return self.links
 
     def getTopRepos(self, language, number):
-        num_pages = int(number / 100)
+        num_pages = number // 100
         for i in range(0, num_pages):
             r = requests.get("https://api.github.com/search/repositories?q=language:{}&sort=stars&order=desc&per_page={}&page={}".format(language, number, i))
             if r.status_code != 200:
