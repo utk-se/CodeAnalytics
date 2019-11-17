@@ -22,10 +22,12 @@ def main():
     scraper.getTopRepos("java", NUM_TO_SCRAPE)
     scraper.getTopRepos("cpp", NUM_TO_SCRAPE)
 
-    repos = scraper.getLinks()
+    repos = scraper.getRepos()
 
-    for repo in repos:
-        print(repo)
+    print("Python: {}".format(len(repos["python"])))
+    print("Java: {}".format(len(repos["java"])))
+    print("CPP: {}".format(len(repos["cpp"])))
+
 
 if __name__ == "__main__":
     main()
