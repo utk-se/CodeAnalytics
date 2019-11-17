@@ -28,3 +28,5 @@ Ways to split the data...
  ## Running the Code
 
  Please make sure your GitHub keys are in `keys.json`. They can be created [here](https://github.com/settings/developers) under OAuth Apps.
+
+ Create a virtual environment for python 3 by typing `python3 -m venv env`. Then, activate the virtual environment by typing `source env/bin/activate`. Finally, install all the requirements by typing `pip install -r requirements.txt`.
