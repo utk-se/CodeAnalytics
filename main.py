@@ -18,23 +18,9 @@ def main():
 
     scraper = PythonScraper(KEYS)
 
-    try:
-        scraper.getTopRepos("python", NUM_TO_SCRAPE)
-    except Exception as error:
-        print(error)
-        return
-
-    try:
-        scraper.getTopRepos("cpp", NUM_TO_SCRAPE)
-    except Exception as error:
-        print(error)
-        return
-
-    try:
-        scraper.getTopRepos("java", NUM_TO_SCRAPE)
-    except Exception as error:
-        print(error)
-        return
+    scraper.getTopRepos("python", NUM_TO_SCRAPE)
+    scraper.getTopRepos("java", NUM_TO_SCRAPE)
+    scraper.getTopRepos("cpp", NUM_TO_SCRAPE)
 
     repos = scraper.getLinks()
 
