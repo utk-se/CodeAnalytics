@@ -1,5 +1,4 @@
 import json
-import time
 from scraper import PythonScraper
 
 def main():
@@ -23,11 +22,6 @@ def main():
     scraper.getTopRepos("cpp", NUM_TO_SCRAPE)
 
     repos = scraper.getRepos()
-
-    print("Python: {}".format(len(repos["python"])))
-    print("Java: {}".format(len(repos["java"])))
-    print("CPP: {}".format(len(repos["cpp"])))
-
 
 if __name__ == "__main__":
     main()
