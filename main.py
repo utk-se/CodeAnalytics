@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 import shutil
 
@@ -7,6 +8,12 @@ from git import Repo
 
 def main():
 
+    logging.basicConfig(
+        filename="log.txt",
+        level=logging.INFO,
+        format='L %(asctime)s %(message)s',
+        datefmt='%m/%d/%Y %H:%M:%S'
+    )
 
     KEY_FILE = "keys.json"
     REPOS_DIR = "repos/"
@@ -22,6 +29,7 @@ def main():
 
     scraper = PythonScraper(KEYS)
 
+    logging.info("Getting top {} repositories for languages".format(NUM_TO_SCRAPE))
     scraper.getTopRepos("python", NUM_TO_SCRAPE)
     # scraper.getTopRepos("java", NUM_TO_SCRAPE)
     # scraper.getTopRepos("cpp", NUM_TO_SCRAPE)
@@ -32,10 +40,10 @@ def main():
         for repo in repos[language]:
             repo_name = repo.split('/')[1]
             repo_dest = REPOS_DIR + repo_name
-            print("Cloning {}".format(repo))
+            logging.info("Cloning {}".format(repo))
             Repo.clone_from(repos[language][repo]["html_url"], repo_dest)
             # Run analysis here...
-            print("Deleting {}".format(repo))
+            logging.info("Deleting {}".format(repo))
             shutil.rmtree(repo_dest)
 
 if __name__ == "__main__":
