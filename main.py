@@ -21,6 +21,7 @@ def main():
     )
 
     KEY_FILE = "keys.json"
+    DATA_FILE=  "data.json"
     REPOS_DIR = "repos/"
     NUM_TO_SCRAPE = 10
 
@@ -41,15 +42,21 @@ def main():
 
     repos = scraper.getRepos()
 
-    for language in repos:
-        for repo in repos[language]:
-            repo_name = repo.split('/')[1]
-            repo_dest = REPOS_DIR + repo_name
-            logging.info("Cloning {}".format(repo))
-            Repo.clone_from(repos[language][repo]["html_url"], repo_dest)
-            # Run analysis here...
-            logging.info("Deleting {}".format(repo))
-            shutil.rmtree(repo_dest, onerror=del_rw)
+    # let's save what we have
+    data = json.dumps(repos, indent=4)
+    with open(DATA_FILE, 'w') as data_file:
+        data_file.write(data)
+
+
+    # for language in repos:
+    #     for repo in repos[language]:
+    #         repo_name = repo.split('/')[1]
+    #         repo_dest = REPOS_DIR + repo_name
+    #         logging.info("Cloning {}".format(repo))
+    #         Repo.clone_from(repos[language][repo]["html_url"], repo_dest)
+    #         # Run analysis here...
+    #         logging.info("Deleting {}".format(repo))
+    #         shutil.rmtree(repo_dest, onerror=del_rw)
 
 if __name__ == "__main__":
     main()
