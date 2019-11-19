@@ -2,9 +2,14 @@ import json
 import logging
 import os
 import shutil
+import stat
 
 from scraper import PythonScraper
 from git import Repo
+
+def del_rw(action, name, exc):
+    os.chmod(name, stat.S_IWRITE)
+    os.remove(name)
 
 def main():
 
@@ -44,7 +49,7 @@ def main():
             Repo.clone_from(repos[language][repo]["html_url"], repo_dest)
             # Run analysis here...
             logging.info("Deleting {}".format(repo))
-            shutil.rmtree(repo_dest)
+            shutil.rmtree(repo_dest, onerror=del_rw)
 
 if __name__ == "__main__":
     main()
