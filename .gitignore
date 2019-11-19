@@ -3,3 +3,4 @@ env/
 __pycache__
 keys.json
 data.json
+log.txt
