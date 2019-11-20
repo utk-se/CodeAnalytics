@@ -47,20 +47,23 @@ def main():
         print("Please add your GitHub Client ID and Client Secret to keys.json")
         return
 
-    scraper = PythonScraper(KEYS)
+    # If we want to scrape
+    if(parser.scrape):
+        scraper = PythonScraper(KEYS)
 
-    logging.info("Getting top {} repositories for languages".format(NUM_TO_SCRAPE))
-    scraper.getTopRepos("python", NUM_TO_SCRAPE)
-    # scraper.getTopRepos("java", NUM_TO_SCRAPE)
-    # scraper.getTopRepos("cpp", NUM_TO_SCRAPE)
+        logging.info("Getting top {} repositories for languages".format(NUM_TO_SCRAPE))
+        scraper.getTopRepos("python", NUM_TO_SCRAPE)
+        # scraper.getTopRepos("java", NUM_TO_SCRAPE)
+        # scraper.getTopRepos("cpp", NUM_TO_SCRAPE)
 
-    repos = scraper.getRepos()
+        repos = scraper.getRepos()
 
-    # let's save what we have
-    data = json.dumps(repos, indent=4)
-    with open(DATA_FILE, 'w') as data_file:
-        data_file.write(data)
+        # let's save what we have
+        data = json.dumps(repos, indent=4)
+        with open(DATA_FILE, 'w') as data_file:
+            data_file.write(data)
 
+    # If we want to analyze
 
     # for language in repos:
     #     for repo in repos[language]:
