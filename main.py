@@ -1,3 +1,4 @@
+import argparse
 import json
 import logging
 import os
@@ -11,7 +12,20 @@ def del_rw(action, name, exc):
     os.chmod(name, stat.S_IWRITE)
     os.remove(name)
 
+def parsearg():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-s", "--scrape", action="store_true")
+    parser.add_argument("-a", "--analyze", action="store_true")
+    return parser.parse_args()
+
+
 def main():
+
+    parser = parsearg()
+
+    print(parser)
+
+    return
 
     logging.basicConfig(
         filename="log.txt",
