@@ -1,5 +1,6 @@
 import argparse
 import json
+import lizard
 import logging
 import os
 import shutil
