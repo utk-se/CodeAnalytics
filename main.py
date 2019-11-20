@@ -29,6 +29,7 @@ def main():
     DATA_FILE=  "data.json"
     REPOS_DIR = "repos/"
     NUM_TO_SCRAPE = 10
+    LANGUAGES = ["python", "java", "cpp"]
 
     # Configure the logging
     logging.basicConfig(
@@ -49,9 +50,8 @@ def main():
             
         scraper = PythonScraper(KEYS)
 
-        scraper.getTopRepos("python", NUM_TO_SCRAPE)
-        # scraper.getTopRepos("java", NUM_TO_SCRAPE)
-        # scraper.getTopRepos("cpp", NUM_TO_SCRAPE)
+        for language in LANGUAGES:
+            scraper.getTopRepos(language, NUM_TO_SCRAPE)
 
         repos = scraper.getRepos()
 
