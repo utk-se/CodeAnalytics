@@ -1,2 +1,3 @@
-requests
 gitpython
+lizard
+requests
