@@ -39,10 +39,8 @@ def main():
 
     # If we want to scrape
     if(parser.scrape):
-
         with open(KEY_FILE, 'r') as key_file:
             KEYS = json.load(key_file)
-
 
         if KEYS["client_id"] is "" or KEYS["client_secret"] is "":
             print("Please add your GitHub Client ID and Client Secret to keys.json")
@@ -63,16 +61,16 @@ def main():
             data_file.write(data)
 
     # If we want to analyze
-
-    # for language in repos:
-    #     for repo in repos[language]:
-    #         repo_name = repo.split('/')[1]
-    #         repo_dest = REPOS_DIR + repo_name
-    #         logging.info("Cloning {}".format(repo))
-    #         Repo.clone_from(repos[language][repo]["html_url"], repo_dest)
-    #         # Run analysis here...
-    #         logging.info("Deleting {}".format(repo))
-    #         shutil.rmtree(repo_dest, onerror=del_rw)
+    if(parser.analyze):
+        for language in repos:
+            for repo in repos[language]:
+                repo_name = repo.split('/')[1]
+                repo_dest = REPOS_DIR + repo_name
+                logging.info("Cloning {}".format(repo))
+                Repo.clone_from(repos[language][repo]["html_url"], repo_dest)
+                # Run analysis here...
+                logging.info("Deleting {}".format(repo))
+                shutil.rmtree(repo_dest, onerror=del_rw)
 
 if __name__ == "__main__":
     main()
