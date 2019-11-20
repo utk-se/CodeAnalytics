@@ -23,10 +23,13 @@ def main():
 
     parser = parsearg()
 
-    print(parser)
+    # "Constants" that we need
+    KEY_FILE = "keys.json"
+    DATA_FILE=  "data.json"
+    REPOS_DIR = "repos/"
+    NUM_TO_SCRAPE = 10
 
-    return
-
+    # Configure the logging
     logging.basicConfig(
         filename="log.txt",
         level=logging.INFO,
@@ -34,21 +37,17 @@ def main():
         datefmt='%m/%d/%Y %H:%M:%S'
     )
 
-    KEY_FILE = "keys.json"
-    DATA_FILE=  "data.json"
-    REPOS_DIR = "repos/"
-    NUM_TO_SCRAPE = 10
-
-    with open(KEY_FILE, 'r') as key_file:
-        KEYS = json.load(key_file)
-
-
-    if KEYS["client_id"] is "" or KEYS["client_secret"] is "":
-        print("Please add your GitHub Client ID and Client Secret to keys.json")
-        return
-
     # If we want to scrape
     if(parser.scrape):
+
+        with open(KEY_FILE, 'r') as key_file:
+            KEYS = json.load(key_file)
+
+
+        if KEYS["client_id"] is "" or KEYS["client_secret"] is "":
+            print("Please add your GitHub Client ID and Client Secret to keys.json")
+            return
+            
         scraper = PythonScraper(KEYS)
 
         logging.info("Getting top {} repositories for languages".format(NUM_TO_SCRAPE))
