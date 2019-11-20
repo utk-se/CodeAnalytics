@@ -15,8 +15,8 @@ def del_rw(action, name, exc):
 
 def parsearg():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-s", "--scrape", action="store_true")
-    parser.add_argument("-a", "--analyze", action="store_true")
+    parser.add_argument("--scrape", action="store_true")
+    parser.add_argument("--analyze", action="store_true")
     return parser.parse_args()
 
 
