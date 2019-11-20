@@ -35,7 +35,7 @@ def main():
         filename="log.txt",
         level=logging.INFO,
         format='L %(asctime)s %(message)s',
-        datefmt='%m/%d/%Y %H:%M:%S'
+        datefmt='%Y-%m-%d-%H-%M-%S'
     )
 
     # If we want to scrape
@@ -49,12 +49,18 @@ def main():
             
         scraper = PythonScraper(KEYS)
 
-        logging.info("Getting top {} repositories for languages".format(NUM_TO_SCRAPE))
         scraper.getTopRepos("python", NUM_TO_SCRAPE)
         # scraper.getTopRepos("java", NUM_TO_SCRAPE)
         # scraper.getTopRepos("cpp", NUM_TO_SCRAPE)
 
         repos = scraper.getRepos()
+
+        for language in repos:
+            for repo in repos[language]:
+                logging.info("{} {}".format(
+                    language,
+                    repos[language][repo]["html_url"]
+                    ))
 
         # let's save what we have
         data = json.dumps(repos, indent=4)
