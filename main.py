@@ -19,14 +19,20 @@ def parsearg():
     parser.add_argument("--analyze", action="store_true")
     return parser.parse_args()
 
-def printfiles(lfiles):
+
+def printfilescsv(language, repo, lfiles):
+    repo = repo.replace('/', '_')
+    PATH = "./data/{}/{}.csv".format(language, repo)
+    os.makedirs(os.path.dirname(PATH), exist_ok=True)
+    with open(PATH, "w+") as csv_file:
+        csv_file.write("File, Function, Length\n")
         for lfile in lfiles:
-            print("File: {}".format(lfile.filename))
             for func in lfile.function_list:
-                print("     Function Name: {}".format(func.long_name))
-                print("         Length: {}".format(func.length))
-                print("         Start: {}".format(func.start_line))
-                print("         Ends: {}".format(func.start_line + func.length - 1))
+                csv_file.write("{},\"{}\",{}\n".format(
+                    lfile.filename, 
+                    func.long_name.replace("\"", "\'"), 
+                    func.length))
+    
 
 def main():
 
@@ -36,7 +42,7 @@ def main():
     KEY_FILE = "keys.json"
     DATA_FILE=  "data.json"
     REPOS_DIR = "repos/"
-    NUM_TO_SCRAPE = 10
+    NUM_TO_SCRAPE = 1000
     LANGUAGES = ["python"]
 
     # Configure the logging
@@ -67,8 +73,7 @@ def main():
             for repo in repos[language]:
                 logging.info("{} {}".format(
                     language,
-                    repos[language][repo]["html_url"]
-                    ))
+                    repos[language][repo]["html_url"]))
 
         # let's save what we have
         data = json.dumps(repos, indent=4)
@@ -76,11 +81,15 @@ def main():
             data_file.write(data)
 
     # If we want to analyze
-    if(parser.analyze):
-        lfiles = []
+    if parser.analyze:
+        # If we are only analyzing
+        if not parser.scrape:
+            with open(DATA_FILE) as data_file:
+                repos = json.load(data_file)
         extensions = ["py"]
         for language in repos:
             for repo in repos[language]:
+                lfiles = []
                 repo_name = repo.split('/')[1]
                 repo_dest = REPOS_DIR + repo_name
                 logging.info("Cloning {}".format(repo))
@@ -97,10 +106,10 @@ def main():
                         else:
                             lfile = lizard.analyze_file(fullpath)
                             lfiles.append(lfile)
-                
+
+                printfilescsv(language, repo, lfiles)
                 logging.info("Deleting {}".format(repo))
                 shutil.rmtree(repo_dest, onerror=del_rw)
-        printfiles(lfiles)
 
 if __name__ == "__main__":
     main()
