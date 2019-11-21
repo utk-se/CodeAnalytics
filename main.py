@@ -93,7 +93,7 @@ def main():
                 repo_name = repo.split('/')[1]
                 repo_dest = REPOS_DIR + repo_name
                 logging.info("Cloning {}".format(repo))
-                Repo.clone_from(repos[language][repo]["html_url"], repo_dest)
+                r = Repo.clone_from(repos[language][repo]["html_url"], repo_dest)
                 print("Analyzing {}".format(repo_dest))
                 for (root, subdir, files) in os.walk(repo_dest):
                     for file in files:
@@ -107,6 +107,7 @@ def main():
                             lfile = lizard.analyze_file(fullpath)
                             lfiles.append(lfile)
 
+                r.close()
                 printfilescsv(language, repo, lfiles)
                 logging.info("Deleting {}".format(repo))
                 shutil.rmtree(repo_dest, onerror=del_rw)
