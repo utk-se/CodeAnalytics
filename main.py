@@ -19,6 +19,14 @@ def parsearg():
     parser.add_argument("--analyze", action="store_true")
     return parser.parse_args()
 
+def printfiles(lfiles):
+        for lfile in lfiles:
+            print("File: {}".format(lfile.filename))
+            for func in lfile.function_list:
+                print("     Function Name: {}".format(func.long_name))
+                print("         Length: {}".format(func.length))
+                print("         Start: {}".format(func.start_line))
+                print("         Ends: {}".format(func.start_line + func.length - 1))
 
 def main():
 
@@ -29,7 +37,7 @@ def main():
     DATA_FILE=  "data.json"
     REPOS_DIR = "repos/"
     NUM_TO_SCRAPE = 10
-    LANGUAGES = ["python", "java", "cpp"]
+    LANGUAGES = ["python"]
 
     # Configure the logging
     logging.basicConfig(
@@ -69,15 +77,30 @@ def main():
 
     # If we want to analyze
     if(parser.analyze):
+        lfiles = []
+        extensions = ["py"]
         for language in repos:
             for repo in repos[language]:
                 repo_name = repo.split('/')[1]
                 repo_dest = REPOS_DIR + repo_name
                 logging.info("Cloning {}".format(repo))
                 Repo.clone_from(repos[language][repo]["html_url"], repo_dest)
-                # Run analysis here...
+                print("Analyzing {}".format(repo_dest))
+                for (root, subdir, files) in os.walk(repo_dest):
+                    for file in files:
+                        fullpath = os.path.join(root, file)
+                        if extensions:
+                            for extension in extensions:
+                                if fullpath.endswith(extension):
+                                    lfile = lizard.analyze_file(fullpath)
+                                    lfiles.append(lfile)
+                        else:
+                            lfile = lizard.analyze_file(fullpath)
+                            lfiles.append(lfile)
+                
                 logging.info("Deleting {}".format(repo))
                 shutil.rmtree(repo_dest, onerror=del_rw)
+        printfiles(lfiles)
 
 if __name__ == "__main__":
     main()
