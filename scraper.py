@@ -4,17 +4,9 @@ import time
 class PythonScraper:
 
     def __init__(self, keys):
-        self.repos = {}
         self.keys = keys
 
-    def getRepos(self):
-        return self.repos
-
-    def getTopRepos(self, language, number):
-        # See if language is already there
-        if language not in self.repos:
-            self.repos[language] = {}
-
+    def getTopRepos(self, language, number, callback):
         # See how many pages we are going to need; we can only get 100 at most
         # from each request
         num_pages = number // 100
@@ -26,7 +18,7 @@ class PythonScraper:
                 if num_repos > 100:
                     number = 100
                 else:
-                    number = num_repos                  
+                    number = num_repos
                 r = requests.get(URL.format(
                     language,
                     number,
@@ -38,8 +30,9 @@ class PythonScraper:
                     break
                 else:
                     print("Got throttled! Sleeping for 10 seconds... i = {}, language = {}".format(i, language))
+                    print("status:", r)
                     time.sleep(10)
             for obj in r.json()["items"]:
-                self.repos[language][obj["full_name"]] = obj
-            
+                callback(obj)
+
             num_repos = num_repos - 100
