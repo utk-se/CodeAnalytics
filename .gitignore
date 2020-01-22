@@ -5,3 +5,4 @@ keys.json
 data.json
 log.txt
 data/
+venv/
